@@ -15,8 +15,55 @@ namespace ShiftArrayElements
         /// <exception cref="InvalidOperationException">direction array contains an element that is not <see cref="Direction.Left"/> or <see cref="Direction.Right"/>.</exception>
         public static int[] Shift(int[] source, Direction[] directions)
         {
-            // TODO #1. Implement the method using recursive local functions and Array.Copy method.
-            throw new NotImplementedException();
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (directions == null)
+            {
+                throw new ArgumentNullException(nameof(directions));
+            }
+
+            Shift(source, directions, 0);
+            return source;
+        }
+
+        private static void Shift(int[] source, Direction[] directions, int index)
+        {
+            if (index == directions.Length)
+            {
+                return;
+            }
+
+            Direction currentDirection = directions[index];
+
+            if (currentDirection == Direction.Left)
+            {
+                int firstValue = source[0];
+                for (int j = 0; j < source.Length - 1; j++)
+                {
+                    source[j] = source[j + 1];
+                }
+
+                source[^1] = firstValue;
+            }
+            else if (currentDirection == Direction.Right)
+            {
+                int lastValue = source[^1];
+                for (int j = source.Length - 1; j > 0; j--)
+                {
+                    source[j] = source[j - 1];
+                }
+
+                source[0] = lastValue;
+            }
+            else
+            {
+                throw new InvalidOperationException($"Incorrect {currentDirection} enum value.");
+            }
+
+            Shift(source, directions, index + 1);
         }
     }
 }

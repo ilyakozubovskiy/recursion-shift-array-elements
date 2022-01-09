@@ -14,8 +14,44 @@ namespace ShiftArrayElements
         /// <exception cref="ArgumentNullException">iterations array is null.</exception>
         public static int[] Shift(int[] source, int[] iterations)
         {
-            // TODO #2. Implement the method using recursive local functions and indexers only (don't use Array.Copy method here).
-            throw new NotImplementedException();
-       }
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (iterations == null)
+            {
+                throw new ArgumentNullException(nameof(iterations));
+            }
+
+            Shift(source, iterations, 0);
+            return source;
+        }
+
+        private static void Shift(int[] source, int[] iterations, int index)
+        {
+            if (index == iterations.Length)
+            {
+                return;
+            }
+
+            for (int j = 0; j < iterations[index]; j++)
+            {
+                if (index % 2 == 0)
+                {
+                    int tmp = source[0];
+                    Array.Copy(source, 1, source, 0, source.Length - 1);
+                    source[^1] = tmp;
+                }
+                else
+                {
+                    int tmp = source[^1];
+                    Array.Copy(source, 0, source, 1, source.Length - 1);
+                    source[0] = tmp;
+                }
+            }
+
+            Shift(source, iterations, index + 1);
+        }
     }
 }
